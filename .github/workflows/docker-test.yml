@@ -48,7 +48,7 @@ jobs:
         id: docker_meta
         uses: docker/metadata-action@v3
         with:
-          images: bretfisher/allhands22
+          images: croguerrero/test
           flavor: |
             latest=false
           tags: |
