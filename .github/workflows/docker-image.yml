@@ -1,4 +1,4 @@
-name: 06 Build and Scan
+name: Build and Scan
 
 on:
   push:
