@@ -38,12 +38,22 @@ jobs:
           platforms: linux/amd64
 
 #NEW: (START) ##########################################################
-      - name: Run Trivy for all CVEs (non-blocking)
+      - name: Build an image from Dockerfile
+        run: |
+          docker build -t docker.io/croguerrero/test:${{ github.sha }} .
+
+      - name: Run Trivy vulnerability scanner
         uses: aquasecurity/trivy-action@master
         with:
-          image-ref: ${{ github.run_id }}
-          exit-code: 0
-          format: table 
+          image-ref: 'docker.io/croguerrero/test:${{ github.sha }}'
+          format: 'sarif'
+          output: 'trivy-results.sarif'
+
+      - name: Upload Trivy scan results to GitHub Security tab
+        uses: github/codeql-action/upload-sarif@v1
+        if: always() 
+        with:
+          sarif_file: 'trivy-results.sarif'
 #NEW: (END) ############################################################
 
       - name: Docker Metadata for Final Image Build
